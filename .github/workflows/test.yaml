@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  test-coverage:
+  test:
 
     runs-on: ubuntu-latest
 
