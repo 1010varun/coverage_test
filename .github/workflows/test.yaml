@@ -1,0 +1,35 @@
+name: Coverage Tests
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests with coverage
+        run: npx jest --coverage --coverageReporters="json-summary"
+
+      - name: Send coverage to API
+        uses: actions/run-script@v1
+        with:
+          script: |
+            # Retrieve coverage percentage (modify this logic based on your coverage data format)
+            COVERAGE_PERCENTAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+
+            curl -X POST -H "Content-Type: application/json" -d '{"percentage": '${COVERAGE_PERCENTAGE}'}' http://localhost:3000/badge/adddata
+
+        # env:
+        #   # Replace with your actual API endpoint URL and any required authorization credentials
+        #   API_ENDPOINT: https://your-api-endpoint.com/coverage
