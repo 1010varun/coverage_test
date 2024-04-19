@@ -21,7 +21,7 @@ jobs:
           npx jest --coverage --coverageReporters="json-summary"
           export coverper=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
           echo "total percentage is = $coverper"
-          curl -X POST -H "Content-Type: application/json" -d '{"percentcoverage": '"$coverper"'}' "$API_ENDPOINT"
+          curl -X POST -H "Content-Type: application/json" -d '{"percentage": '"$coverper"'}' "$API_ENDPOINT"
         env: 
           API_ENDPOINT: "http://13.233.199.31:3000/badge/adddata"
 
