@@ -1,23 +1,31 @@
-name: test
+name: Generate Jest Coverage Badges
+
 on:
   push:
     branches:
       - main
-jobs:
 
-  deploy:
-    name: Deploy test branch
+jobs:
+  generate-badges:
+    name: generate badge
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST_DNS }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          script: |
-                  cd test
-                  git pull
-                  npm i --legacy-peer-deps
-                  npm run build
-                  pm2 restart test
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest with coverage
+        run: npx jest --coverage --coverageReporters="json-summary"
+
+      - name: Generate coverage badges
+        run: npx jest-coverage-badges output "./badges"
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@users.noreply.github.com'
+          git add badges/*
+          git commit -m "Update coverage badges" || exit 0
+          git push
