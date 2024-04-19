@@ -1,44 +1,23 @@
-name: Coverage Tests
-
+name: test
 on:
   push:
-    branches: [ "main" ]
-
+    branches:
+      - test
 jobs:
 
-  test:
-
+  deploy:
+    name: Deploy test branch
     runs-on: ubuntu-latest
-    
-
     steps:
-    # - uses: actions/checkout@v2
-
-    - name: Use Node.js 20
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Run tests with coverage
-      run: npx jest --coverage --coverageReporters="json-summary"
-
-    - name: Send coverage to API
-      uses: actions/run-script@v1
-      with:
-        script: |
-          set -e  # Exit script immediately on non-zero exit code (error handling)
-
-          # Retrieve coverage percentage (modify this logic based on your coverage data format)
-          COVERAGE_PERCENTAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
-
-          # Replace with your actual API endpoint URL and any required authorization headers/credentials
-          API_ENDPOINT="http://localhost:3000/badge/addbadge"  # Replace with your actual URL
-
-          curl -X POST -H "Content-Type: application/json" -d '{"coverage": '${COVERAGE_PERCENTAGE}'}' "${API_ENDPOINT}"
-
-        # env:
-          # Add authorization headers or credentials here if needed
-
+      - name: Deploy
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+                  cd test
+                  git pull
+                  npm i --legacy-peer-deps
+                  npm run build
+                  pm2 restart test
