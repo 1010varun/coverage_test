@@ -23,14 +23,14 @@ jobs:
           echo "total percentage is = $coverper"
           curl -X POST -H "Content-Type: application/json" -d '{"coverage": '"$coverper"'}' "$API_ENDPOINT"
         env: 
-          API_ENDPOINT: "http://localhost:3000/badge/adddata"
+          API_ENDPOINT: "http://13.233.199.31:3000/badge/adddata"
 
 
 
-      - name: Send data to endpoint
-        run: echo "total percentage is = $coverper"
-        env: 
-          coverper: ${{ steps.generate-badges.outputs.coverage_percentage }}
+      # - name: Send data to endpoint
+      #   run: echo "total percentage is = $coverper"
+      #   env: 
+      #     coverper: ${{ steps.generate-badges.outputs.coverage_percentage }}
 
       # - name: Send data to endpoint
       #   run: echo "total percentage is = $coverper"
