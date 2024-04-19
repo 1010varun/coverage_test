@@ -29,7 +29,7 @@ jobs:
             COVERAGE_PERCENTAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
 
             # Replace with your actual API endpoint URL and any required authorization headers/credentials
-            API_ENDPOINT="http://localhost:3000/badge/addbadge"  # Replace with your actual URL
+            API_ENDPOINT="https://chat.openai.com/c/9aeb507f-0e55-4e4b-9626-c78d76e9537c"  # Replace with your actual URL
 
             curl -X POST -H "Content-Type: application/json" -d '{"coverage": '${COVERAGE_PERCENTAGE}'}' "${API_ENDPOINT}"
 
