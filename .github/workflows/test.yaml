@@ -22,16 +22,16 @@ jobs:
       - name: Send coverage to API
         uses: actions/run-script@v1
         with:
-        script: |
-          set -e  # Exit script immediately on non-zero exit code (error handling)
+          script: |
+            set -e  # Exit script immediately on non-zero exit code (error handling)
 
-          # Retrieve coverage percentage (modify this logic based on your coverage data format)
-          COVERAGE_PERCENTAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+            # Retrieve coverage percentage (modify this logic based on your coverage data format)
+            COVERAGE_PERCENTAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
 
-          # Replace with your actual API endpoint URL and any required authorization headers/credentials
-          API_ENDPOINT="http://localhost:3000/badge/addbadge"  # Replace with your actual URL
+            # Replace with your actual API endpoint URL and any required authorization headers/credentials
+            API_ENDPOINT="http://localhost:3000/badge/addbadge"  # Replace with your actual URL
 
-          curl -X POST -H "Content-Type: application/json" -d '{"coverage": '${COVERAGE_PERCENTAGE}'}' "${API_ENDPOINT}"
+            curl -X POST -H "Content-Type: application/json" -d '{"coverage": '${COVERAGE_PERCENTAGE}'}' "${API_ENDPOINT}"
 
 
       # - name: Generate coverage badges
