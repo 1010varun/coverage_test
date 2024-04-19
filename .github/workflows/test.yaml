@@ -17,12 +17,20 @@ jobs:
         run: npm install
 
       - name: Run Jest with coverage
-        run: npx jest --coverage --coverageReporters="json-summary"
+        run: | 
+          npx jest --coverage --coverageReporters="json-summary"
+          export coverper=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
+          echo "total percentage is = $coverper"
 
       - name: Send data to endpoint
         run: echo "total percentage is = $coverper"
         env: 
-          coverper: cat coverage/coverage-summary.json | jq '.total.lines.pct'
+          coverper: ${{ steps.generate-badges.outputs.coverage_percentage }}
+
+      # - name: Send data to endpoint
+      #   run: echo "total percentage is = $coverper"
+      #   env: 
+      #     coverper: cat coverage/coverage-summary.json | jq '.total.lines.pct'
         
 
       # - name: Send coverage to API
