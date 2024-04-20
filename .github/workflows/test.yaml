@@ -16,55 +16,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Jest with coverage
+      - name: Run Jest with coverage and add baddge to server
         run: | 
           npx jest --coverage --coverageReporters="json-summary"
           export coverper=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
           echo "total percentage is = $coverper"
           curl -X POST -H "Content-Type: application/json" -d '{"percentage": '"$coverper"'}' "$API_ENDPOINT"
         env: 
-          API_ENDPOINT: "http://13.233.199.31:3000/badge/adddata"
-
-
-
-      # - name: Send data to endpoint
-      #   run: echo "total percentage is = $coverper"
-      #   env: 
-      #     coverper: ${{ steps.generate-badges.outputs.coverage_percentage }}
-
-      # - name: Send data to endpoint
-      #   run: echo "total percentage is = $coverper"
-      #   env: 
-      #     coverper: cat coverage/coverage-summary.json | jq '.total.lines.pct'
-        
-
-      # - name: Send coverage to API
-      #   uses: actions/run-script@v1
-      #   with:
-      #     covper: $(cat coverage/coverage-summary.json | jq '.total.lines.pct')
-      #     endpoint: $(http://localhost:3000/badge/addbadge)
-      #     script: |
-      #       curl -X POST -H "Content-Type: application/json" -d '{"coverage": '${COVERAGE_PERCENTAGE}'}' "${API_ENDPOINT}"
-
-
-      # set -e  # Exit script immediately on non-zero exit code (error handling)
-
-      # # Retrieve coverage percentage (modify this logic based on your coverage data format)
-      # COVERAGE_PERCENTAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
-
-      # # Replace with your actual API endpoint URL and any required authorization headers/credentials
-      # API_ENDPOINT="https://chat.openai.com/c/9aeb507f-0e55-4e4b-9626-c78d76e9537c"  # Replace with your actual URL
-
-      # curl -X POST -H "Content-Type: application/json" -d '{"coverage": '${COVERAGE_PERCENTAGE}'}' "${API_ENDPOINT}"
-
-
-      # - name: Generate coverage badges
-      #   run: npx jest-coverage-badges output "./badges"
-
-      # - name: Commit and push changes
-      #   run: |
-      #     git config --global user.name 'GitHub Actions'
-      #     git config --global user.email 'actions@users.noreply.github.com'
-      #     git add badges/*
-      #     git commit -m "Update coverage badges" || exit 0
-      #     git push
+          API_ENDPOINT: "http://13.201.227.20:3000/badge/adddata"
